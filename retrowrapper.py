@@ -89,6 +89,13 @@ class RetroWrapper():
         self._rx = multiprocessing.Queue()
         self._tx = multiprocessing.Queue()
         self._proc = multiprocessing.Process(target=_retrocom, args=(self._tx, self._rx, game, kwargs), daemon=True)
+        
+    # this is to fix:
+    # An attempt has been made to start a new process before the current process has finished its bootstrapping phase.
+    #
+    # example:
+    # https://github.com/dask/distributed/issues/2557
+    def start(self):
         self._proc.start()
 
     def __del__(self):
